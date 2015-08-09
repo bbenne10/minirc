@@ -3,7 +3,7 @@
 # the user to start/stop daemons.
 
 # Fallback Configuration Values, to be able to run even with a broken, deleted
-# or outdated minirc.conf:
+# or outdated rc.conf:
 DAEMONS="syslog-ng iptables alsa crond dbus wpa_supplicant dhcpcd sshd privoxy polipo acpid mpd vsftpd lighttpd ntpd haveged"
 ENABLED="@syslog-ng @crond @dhcpcd @sshd"
 UDEV="busybox"
@@ -17,7 +17,7 @@ custom_start()   { default_start   "$@"; }
 custom_stop()    { default_stop    "$@"; }
 custom_poll()    { default_poll    "$@"; }
 
-. /etc/minirc.conf
+. /etc/rc.conf
 
 on_boot() {
     #===================

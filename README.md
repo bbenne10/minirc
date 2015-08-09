@@ -32,7 +32,7 @@ When you are confident, run "./setup.sh --force"
 default value "init=/sbin/init" is used.  Check the docs of your boot loader on
 how to change the kernel parameters.
 
-3. Configure /etc/minirc.conf to your needs.
+3. Configure /etc/rc.conf to your needs.
 See sections "Dealing with services" and "Further configuration".
 
 4. Reboot
@@ -58,7 +58,7 @@ lists when you ask which services currently run.
 The variable ENABLED contains a space-separated list of services that are
 started on boot.
 
-You can override them in /etc/minirc.conf.  This file is simply sourced by the
+You can override them in /etc/rc.conf.  This file is simply sourced by the
 script right after defining the default variables.
 
 To add another service, simply add it to the respective variable.  If you don't
@@ -74,7 +74,7 @@ For some services, such as iptables, this obviously doesn't work.  For those,
 there are individual entries in the functions "default_start", "default_stop"
 and "default_poll" in /sbin/rc.  You can override them or add new ones by
 uncommenting and modifying the functions "custom_start", "custom_stop" and
-"custom_poll" in /etc/minirc.conf.
+"custom_poll" in /etc/rc.conf.
 
 
 Further configuration
@@ -85,7 +85,7 @@ Further configuration
    You need to decide what to use to set up the devices and load the modules.
    minirc supports busybox's mdev, systemd's udev, and a fork of udev, eudev,
    by default.  You can change the udev system by writing UDEV=busybox,
-   UDEV=systemd, or UDEV=eudev respectively into /etc/minirc.conf.
+   UDEV=systemd, or UDEV=eudev respectively into /etc/rc.conf.
 
    eudev and systemd's udev work out of the box, so they are recommended.  To
    set up mdev, you can use this as a reference:

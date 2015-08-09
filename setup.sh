@@ -6,14 +6,14 @@ fi
 
 [ -z "$ROOT" ] && ROOT=
 
-echo "==> Installing /sbin/rc, /etc/minirc.conf, /etc/inittab"
+echo "==> Installing /sbin/rc, /etc/rc.conf, /etc/inittab"
 install -Dm755 rc "$ROOT"/sbin/rc
-if [ -f "$ROOT"/etc/minirc.conf ]; then
-    echo ":: Warning: '$ROOT/etc/minirc.conf' already exists!"
-    echo "   Moving it to '$ROOT/etc/minirc.conf.backup'."
-    mv "$ROOT"/etc/minirc.conf "$ROOT"/etc/minirc.conf.backup
+if [ -f "$ROOT"/etc/rc.conf ]; then
+    echo ":: Warning: '$ROOT/etc/rc.conf' already exists!"
+    echo "   Moving it to '$ROOT/etc/rc.conf.backup'."
+    mv "$ROOT"/etc/rc.conf "$ROOT"/etc/rc.conf.backup
 fi
-install -Dm644 minirc.conf "$ROOT"/etc/minirc.conf
+install -Dm644 rc.conf "$ROOT"/etc/rc.conf
 install -Dm644 inittab "$ROOT"/etc/inittab
 
 echo "==> Installing extras"
