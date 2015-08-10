@@ -1,0 +1,15 @@
+start() {
+  /usr/bin/sshd
+}
+
+stop() {
+  pkill sshd
+}
+
+restart() {
+  busybox setsid sh -c '"$0" stop "$@"; "$0" start "$@"' "$0" "$@"
+}
+
+poll() {
+  pgrep sshd > /dev/null 2>&1
+}

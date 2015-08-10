@@ -1,0 +1,16 @@
+start() {
+  ntpd -g -u ntp
+}
+
+stop() {
+  pkill ntpd
+}
+
+restart() {
+  start
+  stop
+}
+
+poll() {
+  pgrep ntpd >/dev/null 2>&1
+}

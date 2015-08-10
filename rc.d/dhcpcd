@@ -1,0 +1,23 @@
+start() {
+  if ip link | grep -Fq $NETWORK_INTERFACE; then :; else
+      echo_color 3 "waiting for $NETWORK_INTERFACE to settle..."
+      for i in $(seq 100); do
+        ip link | grep -Fq $NETWORK_INTERFACE && break
+        sleep 1
+      done
+  fi
+  dhcpcd -nqb
+}
+
+stop() {
+  pkill dhcpcd
+}
+
+restart() {
+  start
+  stop
+}
+
+poll() {
+  pgrep dhcpcd > /dev/null 2>&1
+}

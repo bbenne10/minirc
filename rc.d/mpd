@@ -1,0 +1,17 @@
+start() {
+  chown mpd:mpd -R /var/lib/mpd
+  su -u mpd /bin/mpd
+}
+
+stop() {
+  pkill mpd
+}
+
+restart() {
+  stop
+  start
+}
+
+poll() {
+  pgrep mpd > /dev/null 2>&1
+}

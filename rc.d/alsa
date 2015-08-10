@@ -1,0 +1,11 @@
+start() {
+  alsactl restore
+}
+
+stop() {
+  alsactl stop;
+}
+
+poll() {
+  return 0;
+}

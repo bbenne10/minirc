@@ -1,0 +1,16 @@
+start() {
+  lighttpd -f /etc/lighttpd/lighttpd.conf
+}
+
+stop() {
+  pkill lighttpd
+}
+
+restart() {
+  start
+  stop
+}
+
+poll() {
+  pgrep lighttpd > /dev/null 2>&1
+}

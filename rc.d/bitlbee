@@ -1,0 +1,16 @@
+start() {
+  su -s /bin/sh -c 'bitlbee -F' bitlbee
+}
+
+stop() {
+  pkill bitlbee
+}
+
+poll() {
+  pgrep bitlbee > /dev/null 2>&1
+}
+
+restart () {
+  stop
+  start
+}

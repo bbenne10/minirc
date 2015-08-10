@@ -1,0 +1,16 @@
+start() {
+  crond
+}
+
+stop() {
+  pkill crond
+}
+
+restart() {
+  start
+  stop
+}
+
+poll() {
+  pgrep crond >/dev/null 2>&1
+}

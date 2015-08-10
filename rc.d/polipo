@@ -1,0 +1,16 @@
+start() {
+  su -c 'polipo daemonise=true logFile="/var/log/polipo.log"' -s /bin/sh - nobody
+}
+
+stop() {
+  pkill polipo
+}
+
+restart() {
+  start
+  stop
+}
+
+poll() {
+  pgrep polipo > /dev/null 2>&1
+}

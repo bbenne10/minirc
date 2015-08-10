@@ -1,0 +1,20 @@
+start() {
+  mkdir -p /run/dbus &&
+    dbus-uuidgen --ensure &&
+      dbus-daemon --system
+}
+
+stop() {
+  pkill dbus-launch
+  pkill dbus-daemon
+  rm /run/dbus/pid
+}
+
+poll() {
+  test -e /run/dbus/pid
+}
+
+restart() {
+  stop
+  start
+}

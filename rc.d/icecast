@@ -1,0 +1,16 @@
+start() {
+  icecast -b -c /etc/icecast.xml
+}
+
+stop() {
+  pkill icecast 
+}
+
+restart() {
+  start
+  stop
+}
+
+poll() {
+  pgrep icecast >/dev/null 2>&1
+}

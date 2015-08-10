@@ -1,0 +1,16 @@
+start() {
+  vsftpd &
+}
+
+stop() {
+  pkill vsftpd
+}
+
+restart() {
+  start
+  stop
+}
+
+poll() {
+  pgrep vsftpd > /dev/null 2>&1
+}

@@ -1,0 +1,16 @@
+start() {
+  privoxy --user privoxy.privoxy /etc/privoxy/config
+}
+
+stop() {
+  pkill privoxy
+}
+
+restart() {
+  start
+  stop
+}
+
+poll() {
+  pgrep privoxy >/dev/null 2>&1
+}

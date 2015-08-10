@@ -1,0 +1,18 @@
+start() {
+  iptables-resture < /etc/iptables/iptables.rules
+}
+
+stop() {
+  for table in $(cat /proc/net/ip_tables_names); do
+    iptables-restore < /var/lib/iptables/empty-"$table".rules
+  done
+}
+
+restart() {
+  stop
+  start
+}
+
+poll() {
+  iptables -L -n | grep -m 1 -q '^ACCEPT\|^REJECT'
+}

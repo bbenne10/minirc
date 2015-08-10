@@ -1,0 +1,16 @@
+start() {
+  wpa_supplicant -Dwext -B -i"$WIFI_INTERFACE" -c/etc/wpa_supplicant.conf
+}
+
+stop() {
+  pkill wpa_supplicant
+}
+
+restart() {
+  start
+  stop
+}
+
+poll() {
+  pgrep wpa_supplicant >/dev/null 2>&1
+}
