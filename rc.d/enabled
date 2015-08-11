@@ -1,0 +1,26 @@
+. /bin/rc
+. /etc/rc.conf
+
+start() {
+  for dmn in ${ENABLED[@]}; do
+    start_dmn $dmn
+  done
+}
+
+stop() {
+  for dmn in ${ENABLED[@]}; do
+    stop_dmn $dmn
+  done
+}
+
+restart() {
+  for dmn in ${ENABLED[@]}; do
+    stop_dmn $dmn
+    start_dmn $dmn
+  done
+}
+
+poll() {
+  # doesn't make sense for 'all'
+  return 0
+}

@@ -1,0 +1,41 @@
+. /bin/rc
+
+get_all_dmns () {
+  all_dmns=$(ls /etc/rc.d/)
+  for i in ${all_dmns[@]}; do
+    if [ "$i" = 'all' -o "$i" = 'enabled' ]; then
+      continue
+    fi
+
+    echo $i
+  done
+}
+
+start() {
+  all_dmns=$(get_all_dmns)
+  for dmn in ${all_dmns[@]}; do
+    start_dmn $dmn
+  done
+}
+
+stop() {
+  all_dmns=$(get_all_dmns)
+  for dmn in ${all_dmns[@]}; do
+    stop_dmn $dmn
+  done
+}
+
+restart() {
+  all_dmns=$(get_all_dmns)
+  for dmn in ${all_dmns[@]}; do
+    stop_dmn $dmn
+    start_dmn $dmn
+  done
+}
+
+poll() {
+  # doesn't make sense for 'all'
+  return 0
+}
+
+start;
