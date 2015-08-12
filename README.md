@@ -48,29 +48,24 @@ for poweroff to the process 1.
 
 ## Managing services
 
-The variable DAEMONS contains a space-separated list of services that minirc
-lists when you ask which services currently run.
+A service is defined as any file present in /etc/rc.d/. Any of these services
+may be enabled by adding their name to the space-separated list called ENABLED
+in /etc/rc.conf. The name may be prefixed with '@' to start that service in
+the background.
 
-The variable ENABLED contains a space-separated list of services that are
-started on boot.
+## Writing services
 
-You can override them in /etc/rc.conf.  This file is simply sourced by the
-script right after defining the default variables.
+Services are intentionally simple. They simply export four functions that map
+to the four main functions one may perform on a service. They export:
 
-To add another service, simply add it to the respective variable.  If you don't
-specify anything else -- and this is indeed enough for most services -- minirc
-has certain standard behaviors for starting, stopping and polling a service
-with the name $service:
+  1) `start`: Which serves to get the service into a running state
+  2) `stop`: Which serves to stop the service
+  3) `restart`: Which serves to restart the service (and often will just call start and stop)
+  4) `poll`: Which determines if the service is currently running
 
-1. rc start $service          -> "$service"
-2. rc stop $service           -> killall "$service"
-3. determine if $service runs -> pgrep "^$service\$" >& /dev/null
+`start`, `stop`, `restart` do not have a defined return value. `poll` should
+return 0 if the service is currently running, and 1 in the case that it is not.
 
-For some services, such as iptables, this obviously doesn't work.  For those,
-there are individual entries in the functions "default_start", "default_stop"
-and "default_poll" in /sbin/rc.  You can override them or add new ones by
-uncommenting and modifying the functions "custom_start", "custom_stop" and
-"custom_poll" in /etc/rc.conf.
 
 ## Further configuration
 
@@ -86,23 +81,20 @@ uncommenting and modifying the functions "custom_start", "custom_stop" and
    set up mdev, you can use this as a reference:
    https://github.com/slashbeast/mdev-like-a-boss.
 
-2. Local startup script
+### Local startup script
 
-   Minirc will run /etc/minirc.local on boot if the file exists and has the
-   executable bit set. This allows the user to run commands in addition to the
-   basic startup that minirc provides. This is a good place to load modules if
-   udev does not detect that they should be loaded on boot.
-
-
-Usage of the user space program
--------------------------------
-
-Run "rc --help" for information.  Never run "rc init" except during the boot
-process, when called by busybox init.
+   rc will run /etc/rc.local on boot if the file exists and has the executable
+   bit set. This allows the user to run commands in addition to the basic
+   startup that rc provides. This is a good place to load modules if udev does
+   not detect that they should be loaded on boot.
 
 
-About
------
+## Usage of the user space program
+
+Run "rc --help" for information.  **Never run "rc init" except during the boot
+process, when called by busybox init.**
+
+
 
 * Authors: Roman Zimbelmann, Sam Stuewe
 * License: GPL2
