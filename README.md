@@ -58,10 +58,10 @@ the background.
 Services are intentionally simple. They simply export four functions that map
 to the four main functions one may perform on a service. They export:
 
-1) `start`: Which serves to get the service into a running state
-2) `stop`: Which serves to stop the service
-3) `restart`: Which serves to restart the service (and often will just call start and stop)
-4) `poll`: Which determines if the service is currently running
+1. `start`: Which serves to get the service into a running state
+2. `stop`: Which serves to stop the service
+3. `restart`: Which serves to restart the service (and often will just call start and stop)
+4. `poll`: Which determines if the service is currently running
 
 `start`, `stop`, `restart` do not have a defined return value. `poll` should
 return 0 if the service is currently running, and 1 in the case that it is not.
