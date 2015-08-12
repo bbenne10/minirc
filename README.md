@@ -96,9 +96,16 @@ process, when called by busybox init.**
 
 
 
-* Authors: Roman Zimbelmann, Sam Stuewe
-* License: GPL2
+## About
+
+rc is a fork of [minirc](http://github.com/hut/minirc).
+
+minirc is, at the time of forking, written by Roman Zimbelmann, Sam Stuewe and
+is available under the GPL v2 license.
 
 Parts of the function on_boot() and the start/stop function of iptables were
-taken from archlinux initscripts (http://www.archlinux.org).  I was unable to
-determine the author or authors of those parts.
+taken from archlinux initscripts (http://www.archlinux.org).  minirc's authors
+were unable to determine the author or authors of those parts. I have made no
+such attempt to find the authors.
+
+For information on rc's license, please see LICENSE in the source repository.
