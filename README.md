@@ -1,5 +1,4 @@
-minirc - minimalistic rc script
-===============================
+# rc - simple BSD-ish init system
 
 The script "rc" is a minimalistic init script made for use with busybox init.
 It starts up udev, sets the hostname, mounts the file systems, starts the
@@ -14,8 +13,7 @@ on other distributions as well.
 ![screenshot](screenshot.png)
 
 
-Installing
-----------
+## Installing
 
 Dependencies: busybox, optionally eudev or systemd (for udev)
 
@@ -38,8 +36,7 @@ See sections "Dealing with services" and "Further configuration".
 4. Reboot
 
 
-Shutdown & Reboot
------------------
+## Shutdown & Reboot
 
 You need to use busybox's version of the reboot command by either typing in
 "busybox reboot" or by linking busybox to /bin/reboot and executing it.
@@ -49,8 +46,7 @@ You can alternatively send the signals TERM for reboot, USR1 for halt or USR2
 for poweroff to the process 1.
 
 
-Dealing with services
----------------------
+## Managing services
 
 The variable DAEMONS contains a space-separated list of services that minirc
 lists when you ask which services currently run.
@@ -76,11 +72,10 @@ and "default_poll" in /sbin/rc.  You can override them or add new ones by
 uncommenting and modifying the functions "custom_start", "custom_stop" and
 "custom_poll" in /etc/rc.conf.
 
+## Further configuration
 
-Further configuration
----------------------
 
-1. udev
+### udev
 
    You need to decide what to use to set up the devices and load the modules.
    minirc supports busybox's mdev, systemd's udev, and a fork of udev, eudev,
