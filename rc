@@ -132,7 +132,7 @@ restart_dmn () {
   if [ -f "/etc/rc.d/$1" ]; then
     . "/etc/rc.d/$1";
 
-    if type restart; then
+    if type restart >/dev/null 2>&1; then
       restart;
     else
       stop;
