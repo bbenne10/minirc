@@ -177,7 +177,7 @@ case "$1" in
   list|'')
     # list all daemons and their status
     for dmn in $DAEMONS; do
-      if [ $dmn = 'all' || $dmn = 'enabled' ]; then
+      if [ "$dmn" = "all" -o "$dmn" = "enabled" ]; then
         continue;
       fi
 
