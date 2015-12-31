@@ -6,13 +6,16 @@ fi
 
 [ -z "$ROOT" ] && ROOT=
 
-echo "==> Installing /sbin/rc, /etc/rc.conf, /etc/inittab"
+echo "==> Installing /sbin/rc, /etc/rc.conf, /etc/rc.d/, /etc/inittab"
 install -Dm755 rc "$ROOT"/sbin/rc
 if [ -f "$ROOT"/etc/rc.conf ]; then
   echo ":: Warning: '$ROOT/etc/rc.conf' already exists!"
   echo "   Moving it to '$ROOT/etc/rc.conf.backup'."
   mv "$ROOT"/etc/rc.conf "$ROOT"/etc/rc.conf.backup
 fi
+
+cp -r rc.d "$ROOT"/etc/rc.d
+chmod -R /etc/rc.d/
 install -Dm644 rc.conf "$ROOT"/etc/rc.conf
 install -Dm644 inittab "$ROOT"/etc/inittab
 
