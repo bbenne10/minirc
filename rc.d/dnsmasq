@@ -1,0 +1,17 @@
+start() {
+  /usr/bin/dnsmasq --test
+  /usr/bin/dnsmasq -k --enable-dbus --user=dnsmasq --pid-file
+}
+
+stop() {
+  pkill dnsmasq
+}
+
+poll() {
+  pgrep dnsmasq > /dev/null 2>&1
+}
+
+restart() {
+  stop
+  start
+}
