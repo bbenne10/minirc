@@ -2,9 +2,10 @@
 # This file is executed on boot to initialize the system and can also be run by
 # the user to start/stop daemons.
 
+DAEMONS=$(ls /etc/rc.d/)
+
 # Fallback Configuration Values, to be able to run even with a broken, deleted
 # or outdated rc.conf:
-DAEMONS=$(ls /etc/rc.d)
 ENABLED="@syslog-ng @crond @dhcpcd @sshd"
 UDEV="busybox"
 NETWORK_INTERFACE="eth0"
