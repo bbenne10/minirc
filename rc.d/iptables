@@ -14,5 +14,9 @@ restart() {
 }
 
 poll() {
-  iptables -L -n | grep -m 1 -q '^ACCEPT\|^REJECT'
+  if lsmod | grep iptables; then
+    iptables -L -n | grep -m 1 -q '^ACCEPT\|^REJECT'
+  else
+    return 1
+  fi
 }
