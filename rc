@@ -135,14 +135,6 @@ check_run_cmd () {
   fi
 }
 
-start_dmn () {
-  check_run_cmd start $1;
-}
-
-stop_dmn () {
-  check_run_cmd stop $1;
-}
-
 restart_dmn () {
   echo_color 2 "Restarting $1"
   if [ -f "/etc/rc.d/$1" ]; then
@@ -180,13 +172,17 @@ case "$1" in
 
   shutdown)
     on_shutdown;
+
+    ;;
+  restart)
+    restart_dmn "$dmn"
     ;;
 
-  start|stop|restart)
+  start|stop)
     cmd="$1";
     shift;
     for dmn in ${@:-$DAEMONS}; do
-      "${cmd}"_dmn "$dmn"
+        check_run_cmd "$cmd" "$dmn"
     done
     ;;
 
