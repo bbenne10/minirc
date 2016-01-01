@@ -187,7 +187,7 @@ case "$1" in
     done
     ;;
 
-  list|'')
+  list)
     # list all daemons and their status
     for dmn in $DAEMONS; do
       if [ "$dmn" = "all" -o "$dmn" = "enabled" ]; then
@@ -204,6 +204,10 @@ case "$1" in
 
   --version)
     printf 'rc - version 0.1a\n'
+    ;;
+
+  '')
+    # Do nothing, as we source this script in other places
     ;;
 
   *)
