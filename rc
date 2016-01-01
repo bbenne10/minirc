@@ -55,10 +55,10 @@ on_boot() {
   mount -o remount,rw /
 
   #===================
-  # load /etc/minirc.local
-  if [ -x /etc/minirc.local ]; then
-    echo_color 3 loading /etc/minirc.local...
-    /etc/minirc.local
+  # load /etc/rc.local
+  if [ -x /etc/rc.local ]; then
+    echo_color 3 loading /etc/rc.local...
+    /etc/rc.local
   fi
 
   #===================
@@ -86,10 +86,10 @@ on_shutdown() {
   busybox killall5 -KILL
 
   #===================
-  # load minirc.local.shutdown
-  if [ -x /etc/minirc.local.shutdown ]; then
-    echo_color 3 loading /etc/minirc.local.shutdown...
-    /etc/minirc.local.shutdown
+  # load rc.local.shutdown
+  if [ -x /etc/rc.local.shutdown ]; then
+    echo_color 3 loading /etc/rc.local.shutdown...
+    /etc/rc.local.shutdown
   fi
 
   #===================
