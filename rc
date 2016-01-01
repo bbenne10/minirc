@@ -148,7 +148,7 @@ restart_dmn () {
       start;
     fi
   else
-    echo_color 3 no daemon found for '$1' \(does it have a file in /etc/rc.d?\);
+    echo_color 3 no daemon found for \'$1\' \(does it have a file in /etc/rc.d?\);
     exit 1;
   fi
 }
@@ -158,7 +158,7 @@ poll_dmn () {
       . "/etc/rc.d/$1";
       poll;
   else
-    echo_color 3 no daemon found for '$1' \(does it have a file in /etc/rc.d?\);
+    echo_color 3 no daemon found for \'$1\' \(does it have a file in /etc/rc.d?\);
     exit 1;
   fi
 }
