@@ -26,6 +26,8 @@ on_boot() {
   mountpoint -q /dev/pts || mount -t devpts devpts /dev/pts -o mode=0620,gid=5,nosuid,noexec
   mountpoint -q /dev/shm || mount -t tmpfs shm /dev/shm -o mode=1777,nosuid,nodev
 
+  mkdir -p -m 1777 /run/lock
+
   #===================
   # initialize system
   echo_color 3 setting up loopback device...
@@ -77,6 +79,12 @@ on_shutdown() {
   echo_color 3 stopping daemons...
   stop_dmn all
 
+  echo_color 3 stopping all remaining processes...
+  busybox killall5 -TERM
+  sleep 3
+  echo_color 3 killing all remaining processes...
+  busybox killall5 -KILL
+
   #===================
   # load minirc.local.shutdown
   if [ -x /etc/minirc.local.shutdown ]; then
@@ -93,10 +101,18 @@ on_shutdown() {
     killall udevd
   fi
 
+  echo_color 3 Detaching all loop devices...
+  losetup -D
+
   #===================
   # umount the API filesystem
   echo_color 3 unmounting API filesystem...
   umount -r /run
+
+  umount -a -r
+
+  mount -o ro,remount /
+
 }
 
 echo_color() {
