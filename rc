@@ -130,7 +130,7 @@ check_run_cmd () {
     . "/etc/rc.d/$dmn";
     $cmd;
   else
-    echo_color 3 no daemon found for '$dmn' \(does it have a file in /etc/rc.d\?\)
+    echo_color 3 no daemon found for \'$dmn\' \(does it have a file in /etc/rc.d\?\)
     exit 1
   fi
 }
