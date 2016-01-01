@@ -202,7 +202,7 @@ case "$1" in
     done
     ;;
 
-  --version)
+  -v|--version)
     printf 'rc - version 0.1a\n'
     ;;
 
