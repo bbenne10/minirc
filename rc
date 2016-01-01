@@ -66,9 +66,9 @@ on_boot() {
   echo_color 3 starting daemons...
   for dmn in $ENABLED; do
     if [ "$(echo "$dmn" | awk '{ s=substr($0, 1, 1); print s; }')" = '@' ]; then
-      start_dmn "$(echo "$dmn" | awk '{ s=substr($0, 2); print s; }')" &
+      check_run_cnmd start "$(echo "$dmn" | awk '{ s=substr($0, 2); print s; }')" &
     else
-      start_dmn "$dmn"
+      check_run_cmd start "$dmn"
     fi
   done
 }
@@ -77,7 +77,7 @@ on_shutdown() {
   #===================
   # stop the default daemons
   echo_color 3 stopping daemons...
-  stop_dmn all
+  check_run_cmd stop all
 
   echo_color 3 stopping all remaining processes...
   busybox killall5 -TERM

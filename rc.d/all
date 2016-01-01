@@ -14,22 +14,22 @@ get_all_dmns () {
 start() {
   all_dmns=$(get_all_dmns)
   for dmn in ${all_dmns[@]}; do
-    start_dmn $dmn
+    check_run_cmd start $dmn
   done
 }
 
 stop() {
   all_dmns=$(get_all_dmns)
   for dmn in ${all_dmns[@]}; do
-    stop_dmn $dmn
+    check_run_cmd stop $dmn
   done
 }
 
 restart() {
   all_dmns=$(get_all_dmns)
   for dmn in ${all_dmns[@]}; do
-    stop_dmn $dmn
-    start_dmn $dmn
+    check_run_cmd stop $dmn
+    check_run_cmd start $dmn
   done
 }
 
@@ -38,4 +38,4 @@ poll() {
   return 0
 }
 
-start;
+

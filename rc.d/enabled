@@ -3,20 +3,20 @@
 
 start() {
   for dmn in ${ENABLED[@]}; do
-    start_dmn $dmn
+    check_run_cmd start $dmn
   done
 }
 
 stop() {
   for dmn in ${ENABLED[@]}; do
-    stop_dmn $dmn
+    check_run_cmd stop $dmn
   done
 }
 
 restart() {
   for dmn in ${ENABLED[@]}; do
-    stop_dmn $dmn
-    start_dmn $dmn
+    check_run_cmd stop $dmn
+    check_run_cmd start $dmn
   done
 }
 
