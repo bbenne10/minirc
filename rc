@@ -81,10 +81,10 @@ on_shutdown() {
   check_run_cmd stop all
 
   echo_color 3 stopping all remaining processes...
-  busybox killall5 -TERM
+  /sbin/busybox killall5 -TERM
   sleep 3
   echo_color 3 killing all remaining processes...
-  busybox killall5 -KILL
+  /sbin/busybox killall5 -KILL
 
   #===================
   # load rc.local.shutdown
@@ -112,7 +112,7 @@ on_shutdown() {
 
   umount -a -r
 
-  mount -o ro,remount /
+  mount -o remount,ro /
 
 }
 
@@ -194,7 +194,7 @@ case "$1" in
         continue;
       fi
 
-      if poll_dmn "$dmn" >/dev/null 2>&1; then
+      if poll_dmn "$dmn" ; then
         echo_color 2 [X] "$dmn";
       else
         echo_color 0 [ ] "$dmn";
