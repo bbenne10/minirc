@@ -47,6 +47,7 @@ on_boot() {
     busybox mdev -s
     echo /sbin/mdev > /proc/sys/kernel/hotplug
   fi
+  sleep 3 # need to allow modules to load before we continue
 
   echo_color 3 setting hostname...
   echo "$HOSTNAME" >| /proc/sys/kernel/hostname
