@@ -56,18 +56,19 @@ on_boot() {
   mount -o remount,rw /
 
   #===================
+  # start the default daemons
+  echo_color 3 starting daemons...
+  for dmn in $ENABLED; do
+    check_run_cmd start "$dmn"
+  done
+
+  #===================
   # load /etc/rc.local
   if [ -x /etc/rc.local ]; then
     echo_color 3 loading /etc/rc.local...
     /etc/rc.local
   fi
 
-  #===================
-  # start the default daemons
-  echo_color 3 starting daemons...
-  for dmn in $ENABLED; do
-    check_run_cmd start "$dmn"
-  done
 }
 
 on_shutdown() {
