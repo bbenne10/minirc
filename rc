@@ -66,11 +66,7 @@ on_boot() {
   # start the default daemons
   echo_color 3 starting daemons...
   for dmn in $ENABLED; do
-    if [ "$(echo "$dmn" | awk '{ s=substr($0, 1, 1); print s; }')" = '@' ]; then
-      check_run_cmd start "$(echo "$dmn" | awk '{ s=substr($0, 2); print s; }')" &
-    else
-      check_run_cmd start "$dmn"
-    fi
+    check_run_cmd start "$dmn"
   done
 }
 
@@ -125,11 +121,21 @@ echo_color() {
 check_run_cmd () {
   cmd="$1"
   dmn="$2"
+  bg=0
+  if [ "$(echo "$dmn" | awk '{ s=substr($0, 1, 1); print s; }')" = '@' ]; then
+    dmn="$(echo "$dmn" | awk '{ s=substr($0, 2); print s; }')"
+    bg=1
+  fi
+
   action=$(echo $cmd | sed -e 's/^\([a-z]\)/\u\1/' -e 's/$/ing/')
   echo_color 2 "$action $dmn"
   if [ -f "/etc/rc.d/$dmn" ]; then
     . "/etc/rc.d/$dmn";
-    $cmd;
+    if [ $bg -eq 1 ]; then
+      $cmd &;
+    else
+     $cmd:
+    fi
   else
     echo_color 3 no daemon found for \'$dmn\' \(does it have a file in /etc/rc.d\?\)
     exit 1
