@@ -1,16 +1,21 @@
-start() {
-  if ip link | grep -Fq $NETWORK_INTERFACE; then :; else
-      echo_color 3 "waiting for $NETWORK_INTERFACE to settle..."
+find_device() {
+  if ip link | grep -Fq $1; then :; else
+      echo_color 3 "waiting for $1 to settle..."
       for i in $(seq 100); do
-        ip link | grep -Fq $NETWORK_INTERFACE && break
+        ip link | grep -Fq $1 && break
         sleep 1
       done
   fi
+}
+
+start() {
+  find_device $NETWORK_INTERFACE
+  find_device $WIFI_INTERFACE
   dhcpcd -nqb
 }
 
 stop() {
-  pkill dhcpcd
+  dhcpcd -k
 }
 
 restart() {
