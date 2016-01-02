@@ -67,7 +67,7 @@ on_boot() {
   echo_color 3 starting daemons...
   for dmn in $ENABLED; do
     if [ "$(echo "$dmn" | awk '{ s=substr($0, 1, 1); print s; }')" = '@' ]; then
-      check_run_cnmd start "$(echo "$dmn" | awk '{ s=substr($0, 2); print s; }')" &
+      check_run_cmd start "$(echo "$dmn" | awk '{ s=substr($0, 2); print s; }')" &
     else
       check_run_cmd start "$dmn"
     fi
