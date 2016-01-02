@@ -173,8 +173,18 @@ case "$1" in
 
   shutdown)
     on_shutdown;
-
+    /sbin/busybox poweroff -f
     ;;
+
+  reboot)
+    on_shutdown;
+    /sbin/busybox reboot -f
+   ;;
+
+  suspend)
+    echo "mem" > /sys/power/state
+    ;;
+
   restart)
     restart_dmn "$dmn"
     ;;
