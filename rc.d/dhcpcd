@@ -9,8 +9,8 @@ find_device() {
 }
 
 start() {
-  find_device $NETWORK_INTERFACE
-  find_device $WIFI_INTERFACE
+  find_device $WIRED_INTERFACE
+  find_device $WIRELESS_INTERFACE
   dhcpcd -nqb
 }
 

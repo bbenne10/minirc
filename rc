@@ -8,8 +8,8 @@ DAEMONS=$(ls /etc/rc.d/)
 # or outdated rc.conf:
 ENABLED="@syslog-ng @crond @dhcpcd @sshd"
 UDEV="busybox"
-NETWORK_INTERFACE="eth0"
-WIFI_INTERFACE="wlan0"
+WIRED_ITERFACE="eth0"
+WIRELESS_INTERFACE="wlan0"
 HOSTNAME="$(cat /etc/hostname)"
 
 . /etc/rc.conf
