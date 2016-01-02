@@ -1,0 +1,17 @@
+start() {
+  syslog-ng
+}
+
+stop () {
+  pkill syslog-ng
+}
+
+poll () {
+  pgrep syslog-ng > /dev/null 2>&1
+}
+
+restart () {
+  # TODO: see if syslog-ng has a SIGHUP receiver
+  stop
+  start 
+}
