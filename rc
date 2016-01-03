@@ -257,7 +257,10 @@ case "$1" in
     ;;
 
   restart)
-    restart_dmn "$dmn"
+    shift;
+    for dmn in ${@}; do
+     restart_dmn "$dmn"
+    done
     ;;
 
   start|stop)
