@@ -10,6 +10,7 @@ ENABLED="@syslog-ng @crond @dhcpcd @sshd"
 UDEV="busybox"
 NETWORK_INTERFACES=("eth0" "wlan0")
 HOSTNAME="$(cat /etc/hostname)"
+NUM_TTYS=4
 
 . /etc/rc.conf
 
@@ -124,6 +125,13 @@ on_boot() {
     echo_color 3 loading /etc/rc.local...
     /etc/rc.local
   fi
+
+  # ==========
+  # Start TTYs
+  # ==========
+  for i in $(seq $NUM_TTYS); do
+    agetty -8 -s 38400 tty$i linux &
+  done
 
 }
 
