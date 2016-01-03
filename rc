@@ -190,9 +190,9 @@ check_run_cmd () {
   if [ -f "/etc/rc.d/$dmn" ]; then
     . "/etc/rc.d/$dmn";
     if [ $bg -eq 1 ]; then
-      $cmd &;
+      $cmd &
     else
-     $cmd:
+     $cmd
     fi
   else
     echo_color 3 no daemon found for \'$dmn\' \(does it have a file in /etc/rc.d\?\)
