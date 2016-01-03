@@ -2,7 +2,7 @@ wait_on_devices() {
   for dev in ${NETWORK_INTERFACES[@]}; do
     if ip link | grep -Fq $dev; then :; else
         echo_color 3 "waiting for $dev to settle..."
-        for i in $(seq 100); do
+        for i in $(seq 5); do
           ip link | grep -Fq $dev && break
           sleep 1
         done
