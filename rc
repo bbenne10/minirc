@@ -34,7 +34,7 @@ on_boot() {
   # Setup loopback
   # ==============
   echo_color 3 setting up loopback device...
-  /usr/sbin/ip link set up dev lo
+  ip link set up dev lo
 
   # ==========
   # Setup udev
@@ -57,14 +57,14 @@ on_boot() {
   # =================
   # Check Filesystems
   # =================
-  /bin/mount -o remount,ro /
+  mount -o remount,ro /
 
   echo_color 3 Checking Root Filesystem...
-  /bin/fsck -ATa
+  fsck -ATa
   if [ $? -eq 1 ]; then
     echo_color 1 Filesystem contains errors; Fix manually.
-    /bin/sh
-    /bin/halt -r
+    sh
+    halt -r
   else
     echo_color 2 "\tOk"
   fi
@@ -73,14 +73,14 @@ on_boot() {
   # Mount Filesystems
   # =================
   echo_color 3 Mounting Filesystems...
-  /bin/mount -o remount,rw /
-  /bin/mount -a
+  mount -o remount,rw /
+  mount -a
 
   # =================
   # initialize system
   # =================
 
-  if /bin/grep -q " verbose" /proc/cmdline; then
+  if grep -q " verbose" /proc/cmdline; then
     dmesg -n 8
   else
     dmesg -n 3
@@ -88,22 +88,22 @@ on_boot() {
 
   ln -sf /proc/mounts /etc/mtab
 
-  /bin/ctrlaltdel -s
+  ctrlaltdel soft
 
   # TODO: hwclock2sys?
 
   echo_color 3 Setting random seed
-  [ -f /etc/random-seed ] && /bin/cat /etc/random-seed >/dev/urandom
-  /bin/dd if=/dev/urandom of=/etc/random-seed count=1 bs=512 2>/dev/null
+  [ -f /etc/random-seed ] && cat /etc/random-seed >/dev/urandom
+  dd if=/dev/urandom of=/etc/random-seed count=1 bs=512 2>/dev/null
 
   echo_color 3 Storing dmesg output to /var/log/dmesg.log
-  /bin/dmesg > /var/log/dmesg.log
+  dmesg > /var/log/dmesg.log
 
-  if [ -e /proc/sys/kernel/dmesg_restrict ] && [ $(/bin/cat /proc/sys/kernel/dmesg_restrict) = "1" ];
+  if [ -e /proc/sys/kernel/dmesg_restrict ] && [ $(cat /proc/sys/kernel/dmesg_restrict) = "1" ];
   then
-  	/bin/chmod 0600 /var/log/dmesg.log
+  	chmod 0600 /var/log/dmesg.log
   else
-  	/bin/chmod 0644 /var/log/dmesg.log
+  	chmod 0644 /var/log/dmesg.log
   fi
 
   echo_color 3 setting hostname...
@@ -134,10 +134,10 @@ on_shutdown() {
   check_run_cmd stop all
 
   echo_color 3 stopping all remaining processes...
-  /sbin/busybox killall5 -TERM
+  busybox killall5 -TERM
   sleep 3
   echo_color 3 killing all remaining processes...
-  /sbin/busybox killall5 -KILL
+  busybox killall5 -KILL
 
   #===================
   # load rc.local.shutdown
