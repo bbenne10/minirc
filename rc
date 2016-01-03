@@ -15,10 +15,12 @@ HOSTNAME="$(cat /etc/hostname)"
 . /etc/rc.conf
 
 on_boot() {
-  #===================
+
+  # ========================
   # mount the API filesystem
+  # ========================
   # /proc, /sys, /run, /dev, /run/lock, /dev/pts, /dev/shm
-  echo_color 3 mounting API filesystem...
+  echo_color 3 Mounting API Filesystem...
   mountpoint -q /proc    || mount -t proc proc /proc -o nosuid,noexec,nodev
   mountpoint -q /sys     || mount -t sysfs sys /sys -o nosuid,noexec,nodev
   mountpoint -q /run     || mount -t tmpfs run /run -o mode=0755,nosuid,nodev
@@ -29,12 +31,16 @@ on_boot() {
 
   mkdir -p -m 1777 /run/lock
 
-  #===================
-  # initialize system
+  # ==============
+  # Setup loopback
+  # ==============
   echo_color 3 setting up loopback device...
   /usr/sbin/ip link set up dev lo
 
-  echo_color 3 initializing udev...
+  # ==========
+  # Setup udev
+  # ==========
+  echo_color 3 Initializing udev...
   if [ "$UDEV" = systemd ]; then
     /usr/lib/systemd/systemd-udevd --daemon
     /usr/bin/udevadm trigger --action=add --type=subsystems
@@ -49,22 +55,72 @@ on_boot() {
   fi
   sleep 3 # need to allow modules to load before we continue
 
+  # =================
+  # Check Filesystems
+  # =================
+  /bin/mount -o remount,ro /
+
+  echo_color 3 Checking Root Filesystem...
+  /bin/fsck -ATa
+  if [ $? -eq 1 ]; then
+    echo_color 1 Filesystem contains errors; Fix manually.
+    /bin/sh
+    /bin/halt -r
+  else
+    echo_color 2 "\tOk"
+  fi
+
+  # =================
+  # Mount Filesystems
+  # =================
+  echo_color 3 Mounting Filesystems...
+  /bin/mount -o remount,rw /
+  /bin/mount -a
+
+  # =================
+  # initialize system
+  # =================
+
+  if /bin/grep -q " verbose" /proc/cmdline; then
+    dmesg -n 8
+  else
+    dmesg -n 3
+  fi
+
+  ln -sf /proc/mounts /etc/mtab
+
+  /bin/ctrlaltdel -s
+
+  # TODO: hwclock2sys?
+
+  echo_color 3 Setting random seed
+  [ -f /etc/random-seed ] && /bin/cat /etc/random-seed >/dev/urandom
+  /bin/dd if=/dev/urandom of=/etc/random-seed count=1 bs=512 2>/dev/null
+
+  echo_color 3 Storing dmesg output to /var/log/dmesg.log
+  /bin/dmesg > /var/log/dmesg.log
+
+  if [ -e /proc/sys/kernel/dmesg_restrict ] && [ $(/bin/cat /proc/sys/kernel/dmesg_restrict) = "1" ];
+  then
+  	/bin/chmod 0600 /var/log/dmesg.log
+  else
+  	/bin/chmod 0644 /var/log/dmesg.log
+  fi
+
   echo_color 3 setting hostname...
   echo "$HOSTNAME" >| /proc/sys/kernel/hostname
 
-  echo_color 3 mounting...
-  mount -a
-  mount -o remount,rw /
-
-  #===================
+  # =========================
   # start the default daemons
+  # =========================
   echo_color 3 starting daemons...
   for dmn in $ENABLED; do
     check_run_cmd start "$dmn"
   done
 
-  #===================
+  # ==================
   # load /etc/rc.local
+  # ==================
   if [ -x /etc/rc.local ]; then
     echo_color 3 loading /etc/rc.local...
     /etc/rc.local
