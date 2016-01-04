@@ -16,6 +16,7 @@ start() {
 }
 
 stop() {
+  pgrep wpa_supplicant > /dev/null 2>&1 && pkill wpa_supplicant
   dhcpcd -k
 }
 
