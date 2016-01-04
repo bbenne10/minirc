@@ -1,5 +1,3 @@
-. /bin/rc
-
 get_all_dmns () {
   all_dmns=$(ls /etc/rc.d/)
   for i in ${all_dmns[@]}; do
@@ -12,6 +10,8 @@ get_all_dmns () {
 }
 
 start() {
+  set --
+  . /bin/rc
   all_dmns=$(get_all_dmns)
   for dmn in ${all_dmns[@]}; do
     check_run_cmd start $dmn
@@ -19,6 +19,8 @@ start() {
 }
 
 stop() {
+  set --
+  . /bin/rc
   all_dmns=$(get_all_dmns)
   for dmn in ${all_dmns[@]}; do
     check_run_cmd stop $dmn
@@ -26,6 +28,8 @@ stop() {
 }
 
 restart() {
+  set --
+  . /bin/rc
   all_dmns=$(get_all_dmns)
   for dmn in ${all_dmns[@]}; do
     check_run_cmd stop $dmn
