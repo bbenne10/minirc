@@ -247,13 +247,13 @@ case "$1" in
     ;;
 
   shutdown)
-    on_shutdown;
-    /sbin/busybox poweroff -f
+    on_shutdown
+    halt -p
     ;;
 
   reboot)
-    on_shutdown;
-    /sbin/busybox reboot -f
+    on_shutdown
+    halt -r
    ;;
 
   suspend)
