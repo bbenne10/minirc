@@ -34,7 +34,7 @@ on_boot() {
   # ==============
   # Setup loopback
   # ==============
-  echo_color 3 setting up loopback device...
+  echo_color 3 Setting up loopback device...
   ip link set up dev lo
 
   # ==========
@@ -66,8 +66,6 @@ on_boot() {
     echo_color 1 Filesystem contains errors; Fix manually.
     sh
     halt -r
-  else
-    echo_color 2 "\tOk"
   fi
 
   # =================
@@ -107,13 +105,13 @@ on_boot() {
   	chmod 0644 /var/log/dmesg.log
   fi
 
-  echo_color 3 setting hostname...
+  echo_color 3 Setting hostname...
   echo "$HOSTNAME" >| /proc/sys/kernel/hostname
 
   # =========================
   # start the default daemons
   # =========================
-  echo_color 3 starting daemons...
+  echo_color 3 Starting daemons...
   for dmn in $ENABLED; do
     check_run_cmd start "$dmn"
   done
@@ -122,13 +120,14 @@ on_boot() {
   # load /etc/rc.local
   # ==================
   if [ -x /etc/rc.local ]; then
-    echo_color 3 loading /etc/rc.local...
+    echo_color 3 Loading /etc/rc.local...
     /etc/rc.local
   fi
 
   # ==========
   # Start TTYs
   # ==========
+  echo_color 3 Starting TTYs
   for i in $(seq $NUM_TTYS); do
     agetty -8 -s 38400 tty$i linux &
   done
@@ -136,8 +135,9 @@ on_boot() {
 }
 
 on_shutdown() {
-  #===================
+  # ========================
   # stop the default daemons
+  # ========================
   echo_color 3 stopping daemons...
   check_run_cmd stop all
 
@@ -147,15 +147,17 @@ on_shutdown() {
   echo_color 3 killing all remaining processes...
   busybox killall5 -KILL
 
-  #===================
+  # ======================
   # load rc.local.shutdown
+  # ======================
   if [ -x /etc/rc.local.shutdown ]; then
     echo_color 3 loading /etc/rc.local.shutdown...
     /etc/rc.local.shutdown
   fi
 
-  #===================
+  # ==============
   # shut down udev
+  # ==============
   echo_color 3 shutting down udev...
   if [ "$UDEV" = systemd ]; then
     killall systemd-udevd
@@ -166,8 +168,9 @@ on_shutdown() {
   echo_color 3 Detaching all loop devices...
   losetup -D
 
-  #===================
+  # =========================
   # umount the API filesystem
+  # =========================
   echo_color 3 unmounting API filesystem...
   umount -r /run
 
@@ -235,8 +238,9 @@ poll_dmn () {
 }
 
 
-#===================
+# ================
 # handle arguments
+# ================
 case "$1" in
   init)
     on_boot;
