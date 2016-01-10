@@ -160,11 +160,7 @@ on_shutdown() {
   # shut down udev
   # ==============
   echo_color 3 shutting down udev...
-  if [ "$UDEV" = systemd ]; then
-    killall systemd-udevd
-  elif [ "$UDEV" = eudev ]; then
-    killall udevd
-  fi
+  kill $(pgrep udevd)
 
   echo_color 3 Detaching all loop devices...
   losetup -D
