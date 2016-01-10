@@ -1,40 +1,37 @@
 # rc - simple BSD-ish init system
 
-The script `rc` is a minimalistic init script made for use with busybox init.
-It starts up udev, sets the hostname, mounts the file systems, starts the
-daemons and so on.
+The script `rc` is a minimalistic init script made for use with
+[sinit](http://git.suckless.org/sinit).
+It picks up where sinit leaves off, which is to say it sets the hostname,
+starts udev, starts some daemons (though doesn't ensure they stay running) and
 
 Later, in the user space, you can use it to list currently running daemons and
 individually start or stop them.
 
-It was developed for arch linux to get rid of systemd, but it can probably run
-on other distributions as well.
-
-![screenshot](screenshot.png)
-
+It was developed for arch linux to get rid of systemd's init, but it can
+probably run on other distributions as well.
 
 ## Installing
 
-Dependencies: busybox, optionally eudev or systemd (for udev)
+### Dependencies:
 
-**NOTE:** The archlinux AUR package does step 1 for you.
+* [sinit](http://git.suckless.org/sinit)
+* [ubase](http://git.suckless.org/ubase) (for `killall5` implementation)
+* optionally eudev or systemd (for udev)
 
-1. There is a `setup.sh` script, but you should read it first.  If you don't use
-a package manager which does the sanity checks for you, please check for
-yourself that it doesn't break your system by overwriting essential files.
-Make backups as needed.
+sinit and ubase are downloaded, built and installed into sane places upon
+running `setup.sh`.
 
-When you are confident, run `./setup.sh --force`
+### Procedure
 
-2. Remove `init=...` from your kernel parameters (if it is there) so that the
-default value "init=/sbin/init" is used.  Check the docs of your boot loader on
-how to change the kernel parameters.
+* Read `setup.sh`. Really.
+* `ROOT=test ./setup.sh`
+* Check `test/` to make sure everything looks okay.
+* `sudo ./setup.sh` (and follow its instructions)
+* Check and edit `/etc/rc.conf`
+* Reboot
 
-3. Configure /etc/rc.conf to your needs.
 See sections "Managing Services" and "Further configuration".
-
-4. Reboot
-
 
 ## Shutdown & Reboot
 
