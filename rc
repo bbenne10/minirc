@@ -141,11 +141,12 @@ on_shutdown() {
   echo_color 3 stopping daemons...
   check_run_cmd stop all
 
+  login=$(pgrep login | tr '\n' ',')
   echo_color 3 stopping all remaining processes...
-  busybox killall5 -TERM
+  ubase-box killall5 -s TERM -o $login
   sleep 3
   echo_color 3 killing all remaining processes...
-  busybox killall5 -KILL
+  ubase-box killall5 -s KILL -o $login
 
   # ======================
   # load rc.local.shutdown
