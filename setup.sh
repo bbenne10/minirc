@@ -72,7 +72,7 @@ copy_with_backup rc "$ROOT"/bin/rc 755
 copy_with_backup rc.conf "$ROOT"/etc/rc.conf 644
 
 print 3 "==> Installing extras"
-pushd extras
+pushd extra
   mkdir -p /usr/share/zsh/site-functions/
   copy_with_backup _rc "$ROOT"/usr/share/zsh/site-functions/ 644
 
