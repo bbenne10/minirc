@@ -129,7 +129,7 @@ on_boot() {
   # ==========
   echo_color 3 Starting TTYs
   for i in $(seq $NUM_TTYS); do
-    ubase-box respawn ubase-box getty /dev/tty$i linux &
+    respawn sgetty /dev/tty$i linux &
   done
 
 }
@@ -143,10 +143,10 @@ on_shutdown() {
 
   login=$(pgrep login | tr '\n' ',')
   echo_color 3 stopping all remaining processes...
-  ubase-box killall5 -s TERM -o $login
+  killall5 -s TERM -o $login
   sleep 3
   echo_color 3 killing all remaining processes...
-  ubase-box killall5 -s KILL -o $login
+  killall5 -s KILL -o $login
 
   # ======================
   # load rc.local.shutdown
@@ -234,23 +234,31 @@ poll_dmn () {
   fi
 }
 
+get_cmd () {
+  if [ -n $1 ]; then
+    echo $1;
+  else
+    echo $0 | rev | cut -d "/" -f 1 | rev
+  fi
+}
+
 
 # ================
 # handle arguments
 # ================
-case "$1" in
+case $(get_cmd) in
   init)
     on_boot;
     ;;
 
   shutdown)
     on_shutdown
-    ubase-box halt -p
+    halt -p
     ;;
 
   reboot)
     on_shutdown
-    ubase-box halt -r
+    halt -r
    ;;
 
   suspend)
