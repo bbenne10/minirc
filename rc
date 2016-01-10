@@ -129,7 +129,7 @@ on_boot() {
   # ==========
   echo_color 3 Starting TTYs
   for i in $(seq $NUM_TTYS); do
-    ubase-box getty /dev/tty$i linux
+    ubase-box respawn ubase-box getty /dev/tty$i linux &
   done
 
 }
