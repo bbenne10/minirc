@@ -245,12 +245,12 @@ case "$1" in
 
   shutdown)
     on_shutdown
-    halt -p
+    ubase-box halt -p
     ;;
 
   reboot)
     on_shutdown
-    halt -r
+    ubase-box halt -r
    ;;
 
   suspend)
