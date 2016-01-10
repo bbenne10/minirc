@@ -71,10 +71,11 @@ copy_with_backup rc.d "$ROOT"/etc/rc.d 755
 copy_with_backup rc "$ROOT"/bin/rc 755
 copy_with_backup rc.conf "$ROOT"/etc/rc.conf 644
 
-#
-# # echo "==> Installing extras"
-# # cd extra
-# # install -Dm644 _minirc "$ROOT/usr/share/zsh/site-functions/_minirc"
-# # install -Dm755 shutdown.sh "$ROOT/sbin/shutdown"
-#
+print 3 "==> Installing extras"
+pushd extras
+  mkdir -p /usr/share/zsh/site-functions/
+  copy_with_backup _rc "$ROOT"/usr/share/zsh/site-functions/ 644
+
+install -Dm755 shutdown.sh "$ROOT/sbin/shutdown"
+
 print 3 ":: Now link sinit to /sbin/init or append 'init=/sbin/sinit' in your kernel boot line to complete installation"
