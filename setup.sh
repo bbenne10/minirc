@@ -14,8 +14,8 @@ copy_with_backup () {
   mode=$3
 
   if [ -e "$dest" ]; then
-    print 2 "==> '$dest' exists; creating a backup at $dest.bk..."
-    mv "$dest" "$dest.bk"
+    print 1 "==> '$dest' exists; creating a backup at ${dest}.bk..."
+    mv "${dest}" "${dest}.bk"
   fi
   print 3 "==> Installing $src to $dest ($mode)"
   cp -r "$src" "$dest"
@@ -23,22 +23,39 @@ copy_with_backup () {
   chmod -R "$mode" "$dest"
 }
 
+grab_dep () {
+  if [ ! -d deps/$1 ]; then
+    mkdir -p deps/$1
+    pushd deps > /dev/null
+      git clone http://git.suckless.org/$2 --depth 1
+    popd > /dev/null
+  else
+    pushd deps/$1 > /dev/null
+      git pull --ff-only
+    popd > /dev/null
+  fi
+}
+
 which git > /dev/null || (echo "Please install git" && exit 1)
-if [ -d "$ROOT" ]; then
-  mkdir -p "$ROOT"
-fi
 
-if [ ! -d deps ]; then
-  mkdir deps
-  pushd deps > /dev/null
+# make all our dest directories
+[ ! -d "$ROOT" ] && mkdir -p "$ROOT"
+[ ! -d "$ROOT"/etc/ ] && mkdir -p "$ROOT"/etc/
+[ ! -d "$ROOT"/bin ] && mkdir "$ROOT"/bin/
+[ ! -d "$ROOT"/usr/bin ] && mkdir "$ROOT"/usr/bin/
+[ ! -d "$ROOT"/usr/share/zsh/site-functions/ ] && mkdir -p "$ROOT"/usr/share/zsh/site-functions/
 
+# pull all our dependencies
+grab_dep ubase http://git.suckless.org/ubase
+grab_dep sinit http://git.suckless.org/sinit
+
+# install all of our dependencies
+pushd deps > /dev/null
   if [ ! -f /usr/bin/sgetty ]; then
-    git clone http://git.suckless.org/ubase > /dev/null
-    exit
+    # ubase
     pushd ubase > /dev/null
       print 3 "==> Installing ubase"
       make ubase-box
-      mkdir -p "$ROOT"/usr/bin
       cp ubase-box "$ROOT"/usr/bin
       ln -s "$ROOT"/usr/bin/ubase-box "$ROOT"/usr/bin/sgetty
       ln -s "$ROOT"/usr/bin/ubase-box "$ROOT"/usr/bin/respawn
@@ -50,32 +67,28 @@ if [ ! -d deps ]; then
   fi
 
   if [ ! -f "$ROOT"/bin/sinit ]; then
-    git clone http://git.suckless.org/sinit
+    # sinit
     pushd sinit > /dev/null
       print 3 "==> Installing sinit"
       cp ../../sinit_config config.h
       make
-      mkdir -p "$ROOT"/bin/
       cp sinit "$ROOT"/bin/sinit
     popd > /dev/null
   else
     printf 2 "==> sinit seems to be installed ("$ROOT"/bin/sinit exists). If not, install by hand"
   fi
-  popd > /dev/null
-fi
+popd > /dev/null
 
-mkdir -p "$ROOT"/etc/
-mkdir -p "$ROOT"/bin/
-
+# copy stuff to the dest
 copy_with_backup rc.d "$ROOT"/etc/rc.d 755
 copy_with_backup rc "$ROOT"/bin/rc 755
 copy_with_backup rc.conf "$ROOT"/etc/rc.conf 644
 
+# install extras
 print 3 "==> Installing extras"
-pushd extra
-  mkdir -p /usr/share/zsh/site-functions/
-  copy_with_backup _rc "$ROOT"/usr/share/zsh/site-functions/ 644
-
-install -Dm755 shutdown.sh "$ROOT/sbin/shutdown"
+pushd extra > /dev/null
+  copy_with_backup _rc "$ROOT"/usr/share/zsh/site-functions/_rc 644
+  # install -Dm755 shutdown.sh "$ROOT/sbin/shutdown"
+popd > /dev/null
 
 print 3 ":: Now link sinit to /sbin/init or append 'init=/sbin/sinit' in your kernel boot line to complete installation"
