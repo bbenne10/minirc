@@ -27,7 +27,7 @@ grab_dep () {
   if [ ! -d deps/$1 ]; then
     mkdir -p deps/$1
     pushd deps > /dev/null
-      git clone http://git.suckless.org/$2 --depth 1
+      git clone "$2" --depth 1
     popd > /dev/null
   else
     pushd deps/$1 > /dev/null
