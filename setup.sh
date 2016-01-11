@@ -51,19 +51,19 @@ grab_dep sinit http://git.suckless.org/sinit
 
 # install all of our dependencies
 pushd deps > /dev/null
-  if [ ! -f /usr/bin/sgetty ]; then
+  if [ ! -f /usr/bin/getty ]; then
     # ubase
     pushd ubase > /dev/null
       print 3 "==> Installing ubase"
       make ubase-box
       cp ubase-box "$ROOT"/usr/bin
-      ln -s "$ROOT"/usr/bin/ubase-box "$ROOT"/usr/bin/sgetty
+      ln -s "$ROOT"/usr/bin/ubase-box "$ROOT"/usr/bin/getty
       ln -s "$ROOT"/usr/bin/ubase-box "$ROOT"/usr/bin/respawn
       ln -s "$ROOT"/usr/bin/ubase-box "$ROOT"/usr/bin/halt
       ln -s "$ROOT"/usr/bin/ubase-box "$ROOT"/usr/bin/killall5
     popd > /dev/null
   else
-    print 2 "==> ubase seems to be installed ("$ROOT"/usr/bin/sgetty exists). If not, install by hand"
+    print 2 "==> ubase seems to be installed. Skipping..."
   fi
 
   if [ ! -f "$ROOT"/bin/sinit ]; then
@@ -75,8 +75,9 @@ pushd deps > /dev/null
       cp sinit "$ROOT"/bin/sinit
     popd > /dev/null
   else
-    printf 2 "==> sinit seems to be installed ("$ROOT"/bin/sinit exists). If not, install by hand"
+    print 2 "==> sinit seems to be installed. Skipping..."
   fi
+
 popd > /dev/null
 
 # copy stuff to the dest
