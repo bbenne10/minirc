@@ -35,13 +35,15 @@ See sections "Managing Services" and "Further configuration".
 
 ## Shutdown & Reboot
 
-You need to use busybox's version of the reboot command by either typing in
-`busybox reboot` or by linking busybox to `/bin/reboot` and executing it.
-The same goes for `halt` and `poweroff`.
+Three commands are installed with `setup.sh`: `shutdown`, `poweroff`,
+and `reboot`.
 
-You can alternatively send the signals TERM for reboot, USR1 for halt or USR2
-for poweroff to the process 1.
+* `shutdown` calls `reboot` and `poweroff`, so if they're right `shutdown` will work fine.
+* `poweroff` calls `rc shutdown`, which calls sinit's version `halt` with the `-p` flag.
+* `reboot` calls `rc reboot`, which ultimately calls sinit's `halt` with `-r`
 
+You may also signal sinit directly to perform these actions, but that is outside
+`rc`'s scope.
 
 ## Managing services
 
@@ -49,6 +51,26 @@ A service is defined as any file present in `/etc/rc.d/`. Any of these services
 may be enabled by adding their name to the space-separated list called `ENABLED`
 in `/etc/rc.conf`. The name may be prefixed with '@' to start that service in
 the background.
+
+Starting and stopping a service are simple:
+
+    sudo rc start dbus
+    sudo rc stop dbus
+
+Polling services is equally simple:
+
+    rc list
+
+You may manually trigger shutdown, reboot or suspend with:
+
+    sudo rc shutdown
+    sudo rc reboot
+    sudo rc suspend
+
+**Note**: `rc suspend` does nothing more than `echo "mem" > /sys/power/state`.
+If your machine requires more hand-holding here (unloading modules etc), you're
+currently on your own. I am open to pull requests that address this in a
+general way though.
 
 ## Writing services
 
@@ -66,30 +88,32 @@ return 0 if the service is currently running, and 1 in the case that it is not.
 
 ## Further configuration
 
-
 ### udev
 
-   You need to decide what to use to set up the devices and load the modules.
-   minirc supports busybox's mdev, systemd's udev, and a fork of udev, eudev,
-   by default.  You can change the udev system by writing `UDEV=busybox`,
-   `UDEV=systemd`, or `UDEV=eudev` respectively into `/etc/rc.conf`.
+You need to decide what to use to set up the devices and load the modules.
+rc supports systemd's udev and eudev by default.  You can change the udev
+system by changing the value of the UDEV variable in `rc.conf`
 
-   eudev and systemd's udev work out of the box, so they are recommended.  To
-   set up mdev, you can use [this](https://github.com/slashbeast/mdev-like-a-boss)
-   as a reference:
+rc supports both eudev and systemd's udev implementations as `eudev`
+and `systemd` respectively.
+
+minirc, from which rc forked, supports busybox's `mdev` implementation. This
+was dropped from `rc` due to lack of interest from the developers.
+
 
 ### Local startup script
 
-   rc will run `/etc/rc.local` on boot if the file exists and has the executable
-   bit set. This allows the user to run commands in addition to the basic
-   startup that rc provides. This is a good place to load modules if udev does
-   not detect that they should be loaded on boot.
+rc will run `/etc/rc.local` on boot if the file exists and has the executable
+bit set. This allows the user to run commands in addition to the basic
+startup that rc provides. This is a good place to load modules if udev does
+not detect that they should be loaded on boot or to set the backlight to a
+reasonable level, for instance.
 
 
 ## Usage of the user space program
 
-Run `rc --help` for information.  **Never run `rc init` except during the boot
-process, when called by busybox init.**
+Run `rc --help` for information.
+**Never run `rc init` except during the boot process, when called by sinit.**
 
 
 
