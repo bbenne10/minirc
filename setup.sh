@@ -40,7 +40,7 @@ grab_dep () {
 which git > /dev/null || (echo "Please install git" && exit 1)
 
 # make all our dest directories
-[ ! -d "$ROOT" ] && mkdir -p "$ROOT"
+[ -n "$ROOT" -a ! -d "$ROOT" ] && mkdir -p "$ROOT"
 [ ! -d "$ROOT"/etc/ ] && mkdir -p "$ROOT"/etc/
 [ ! -d "$ROOT"/bin ] && mkdir "$ROOT"/bin/
 [ ! -d "$ROOT"/usr/bin ] && mkdir "$ROOT"/usr/bin/
