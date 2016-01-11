@@ -13,10 +13,11 @@ copy_with_backup () {
   dest=$2
   mode=$3
 
-  if [ -e "$dest" ]; then
+  if [ -e "${dest}" ]; then
     print 1 "==> '$dest' exists; creating a backup at ${dest}.bk..."
     mv "${dest}" "${dest}.bk"
   fi
+
   print 3 "==> Installing $src to $dest ($mode)"
   cp -r "$src" "$dest"
 
@@ -24,13 +25,13 @@ copy_with_backup () {
 }
 
 grab_dep () {
-  if [ ! -d deps/$1 ]; then
-    mkdir -p deps/$1
+  if [ ! -d "deps/$1" ]; then
+    mkdir -p "deps/$1"
     pushd deps > /dev/null
       git clone "$2" --depth 1
     popd > /dev/null
   else
-    pushd deps/$1 > /dev/null
+    pushd "deps/$1" > /dev/null
       git pull --ff-only
     popd > /dev/null
   fi
@@ -89,7 +90,7 @@ copy_with_backup rc.conf "$ROOT"/etc/rc.conf 644
 print 3 "==> Installing extras"
 pushd extra > /dev/null
   copy_with_backup _rc "$ROOT"/usr/share/zsh/site-functions/_rc 644
-  # install -Dm755 shutdown.sh "$ROOT/sbin/shutdown"
+  # install -Dm755 shutdown.sh "${ROOT}/sbin/shutdown"
 popd > /dev/null
 
 print 3 ":: Now link sinit to /sbin/init or append 'init=/sbin/sinit' in your kernel boot line to complete installation"
