@@ -234,19 +234,11 @@ poll_dmn () {
   fi
 }
 
-get_cmd () {
-  if [ -n $1 ]; then
-    echo $1;
-  else
-    echo $0 | rev | cut -d "/" -f 1 | rev
-  fi
-}
-
 
 # ================
 # handle arguments
 # ================
-case $(get_cmd) in
+case $1 in
   init)
     on_boot;
     ;;
