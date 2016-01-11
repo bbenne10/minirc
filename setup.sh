@@ -13,7 +13,11 @@ copy_with_backup () {
   dest=$2
   mode=$3
 
-  if [ -e "${dest}" ]; then
+  if [ -h "${dest}" ]; then
+    # symbolic link
+    print 0 "==> $dest is a symbolic link; forced to remove"
+    rm ${dest}
+  elif [ -e "${dest}" ]; then
     print 1 "==> '$dest' exists; creating a backup at ${dest}.bk..."
     mv "${dest}" "${dest}.bk"
   fi
