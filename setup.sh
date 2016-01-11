@@ -43,6 +43,7 @@ which git > /dev/null || (echo "Please install git" && exit 1)
 [ -n "$ROOT" -a ! -d "$ROOT" ] && mkdir -p "$ROOT"
 [ ! -d "$ROOT"/etc/ ] && mkdir -p "$ROOT"/etc/
 [ ! -d "$ROOT"/bin ] && mkdir "$ROOT"/bin/
+[ ! -d "$ROOT"/sbin ] && mkdir "$ROOT"/sbin/
 [ ! -d "$ROOT"/usr/bin ] && mkdir "$ROOT"/usr/bin/
 [ ! -d "$ROOT"/usr/share/zsh/site-functions/ ] && mkdir -p "$ROOT"/usr/share/zsh/site-functions/
 
@@ -90,7 +91,9 @@ copy_with_backup rc.conf "$ROOT"/etc/rc.conf 644
 print 3 "==> Installing extras"
 pushd extra > /dev/null
   copy_with_backup _rc "$ROOT"/usr/share/zsh/site-functions/_rc 644
-  # install -Dm755 shutdown.sh "${ROOT}/sbin/shutdown"
+  copy_with_backup reboot "$ROOT"/sbin/reboot 755
+  copy_with_backup poweroff "$ROOT"/sbin/poweroff 755
+  copy_with_backup shutdown "$ROOT"/sbin/shutdown 755
 popd > /dev/null
 
 print 3 ":: Now link sinit to /sbin/init or append 'init=/sbin/sinit' in your kernel boot line to complete installation"
