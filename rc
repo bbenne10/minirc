@@ -129,7 +129,7 @@ on_boot() {
   # ==========
   echo_color 3 Starting TTYs
   for i in $(seq $NUM_TTYS); do
-    respawn getty /dev/tty$i linux &
+    respawn agetty -8 -s 38400 "tty$i" linux &
   done
 
 }
