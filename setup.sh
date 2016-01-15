@@ -100,4 +100,12 @@ pushd extra > /dev/null
   copy_with_backup shutdown "$ROOT"/sbin/shutdown 755
 popd > /dev/null
 
+tty_group=$(ls -g /dev/tty0 | cut -f 3 -d" ")
+if [ -e /dev/dri/card0 ]; then
+ dri_group=$(ls -g | cut -f 3 -d" ")
+fi
+
+print 3 ":: *NOTE*: You'll need to ensure that you have the proper permissions"
+print 3 ":: to start Xorg. To start, try: $tty_group $dri_group"
+echo ""
 print 3 ":: Now link sinit to /sbin/init or append 'init=/sbin/sinit' in your kernel boot line to complete installation"
