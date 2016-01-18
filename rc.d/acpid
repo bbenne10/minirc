@@ -1,0 +1,16 @@
+start () {
+  acpid
+}
+
+stop () {
+  pkill acpid
+}
+
+restart () {
+  stop
+  start
+}
+
+poll () {
+ [ -f /var/run/acpid.pid ]
+}
