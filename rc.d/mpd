@@ -1,10 +1,10 @@
 start() {
   chown mpd:mpd -R /var/lib/mpd
-  su -u mpd /bin/mpd
+  sudo -u mpd /bin/mpd
 }
 
 stop() {
-  pkill mpd
+  sudo pkill mpd
 }
 
 restart() {
