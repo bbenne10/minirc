@@ -1,0 +1,16 @@
+start () {
+  sudo -u redis redis /etc/redis.conf
+}
+
+stop () {
+  sudo redis-cli shutdown
+}
+
+restart () {
+  stop
+  start
+}
+
+poll () {
+  pgrep redis-server > /dev/null 2>&1
+}
