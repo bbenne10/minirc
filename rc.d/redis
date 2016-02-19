@@ -1,5 +1,5 @@
 start () {
-  sudo -u redis redis /etc/redis.conf
+  sudo -u redis redis-server /etc/redis.conf
 }
 
 stop () {
